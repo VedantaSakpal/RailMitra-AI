@@ -1,0 +1,278 @@
+{
+  "success": true,
+  "data": {
+    "train": {
+      "trainNumber": "99437",
+      "trainName": "Thane - Vashi Slow Local",
+      "type": "EMU",
+      "zone": null,
+      "sourceStationCode": "TNA",
+      "sourceStationName": "THANE",
+      "destinationStationCode": "VSH",
+      "destinationStationName": "VASHI",
+      "runningDaysBitmap": 127,
+      "runningDays": {
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ],
+        "allDays": true,
+        "isStartingToday": true
+      },
+      "returnTrainNumber": "99438",
+      "travelTimeMinutes": 29,
+      "totalHalts": 9,
+      "distanceKm": 18.5,
+      "avgSpeedKmph": 38.3,
+      "createdAt": 1779560031581,
+      "updatedAt": 1785491342340
+    },
+    "route": [
+      {
+        "id": 1,
+        "sequence": 1,
+        "stationCode": "TNA",
+        "stationName": "THANE",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 0,
+        "speedOnSectionKmph": 45.6,
+        "scheduledDeparture": 648
+      },
+      {
+        "id": 2,
+        "sequence": 2,
+        "stationCode": "XX-TNAC",
+        "stationName": "THANE C CABIN",
+        "isHalt": 0,
+        "day": 1,
+        "distanceFromSourceKm": 2.4,
+        "speedOnSectionKmph": 45.6,
+        "scheduledArrival": 651,
+        "scheduledDeparture": 651,
+        "haltDurationMinutes": 0
+      },
+      {
+        "id": 3,
+        "sequence": 3,
+        "stationCode": "DIGH",
+        "stationName": "DIGHA GAON",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 3.8,
+        "speedOnSectionKmph": 40,
+        "scheduledArrival": 653,
+        "scheduledDeparture": 653,
+        "haltDurationMinutes": 0
+      },
+      {
+        "id": 4,
+        "sequence": 4,
+        "stationCode": "AIRL",
+        "stationName": "AIROLI",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 5.8,
+        "speedOnSectionKmph": 50,
+        "scheduledArrival": 656,
+        "scheduledDeparture": 656,
+        "haltDurationMinutes": 0
+      },
+      {
+        "id": 5,
+        "sequence": 5,
+        "stationCode": "RABE",
+        "stationName": "RABALE",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 8.3,
+        "speedOnSectionKmph": 48,
+        "scheduledArrival": 659,
+        "scheduledDeparture": 659,
+        "haltDurationMinutes": 0
+      },
+      {
+        "id": 6,
+        "sequence": 6,
+        "stationCode": "GNSL",
+        "stationName": "GHANSOLI",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 10.7,
+        "speedOnSectionKmph": 30,
+        "scheduledArrival": 662,
+        "scheduledDeparture": 662,
+        "haltDurationMinutes": 0
+      },
+      {
+        "id": 7,
+        "sequence": 7,
+        "stationCode": "KPHN",
+        "stationName": "KOPAR KHAIRNA",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 12.2,
+        "speedOnSectionKmph": 48,
+        "scheduledArrival": 665,
+        "scheduledDeparture": 665,
+        "haltDurationMinutes": 0
+      },
+      {
+        "id": 8,
+        "sequence": 8,
+        "stationCode": "TUH",
+        "stationName": "TURBHE",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 15.4,
+        "speedOnSectionKmph": 30,
+        "scheduledArrival": 669,
+        "scheduledDeparture": 669,
+        "haltDurationMinutes": 0
+      },
+      {
+        "id": 9,
+        "sequence": 9,
+        "stationCode": "SNCR",
+        "stationName": "SANPADA",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 17.4,
+        "speedOnSectionKmph": 16.5,
+        "scheduledArrival": 673,
+        "scheduledDeparture": 673,
+        "haltDurationMinutes": 0
+      },
+      {
+        "id": 10,
+        "sequence": 10,
+        "stationCode": "VSH",
+        "stationName": "VASHI",
+        "isHalt": 1,
+        "day": 1,
+        "distanceFromSourceKm": 18.5,
+        "scheduledArrival": 677
+      }
+    ],
+    "metadata": {
+      "hasLiveData": true,
+      "lastStaticUpdate": "2026-08-24T17:37:38.372Z",
+      "canRefreshLive": true,
+      "lastLiveUpdate": "2026-08-24T11:37:52+05:30"
+    },
+    "liveData": {
+      "trainNumber": "99437",
+      "journeyDate": "2026-08-24",
+      "lastUpdatedAt": "2026-08-24T11:37:52+05:30",
+      "currentLocation": {
+        "stationCode": "VSH",
+        "sequence": 9,
+        "status": "at-station"
+      },
+      "overallDelayMinutes": null,
+      "dataSource": "COMBINED",
+      "route": [
+        {
+          "sequence": 1,
+          "stationCode": "TNA",
+          "scheduledDeparture": "2026-08-24T10:48:00+05:30",
+          "actualDeparture": "2026-08-24T10:51:00+05:30",
+          "delayDepartureMinutes": 3
+        },
+        {
+          "sequence": 2,
+          "stationCode": "DIGH",
+          "scheduledArrival": "2026-08-24T10:53:00+05:30",
+          "scheduledDeparture": "2026-08-24T10:53:00+05:30",
+          "actualArrival": "2026-08-24T10:56:00+05:30",
+          "actualDeparture": "2026-08-24T10:56:28+05:30",
+          "delayArrivalMinutes": 3,
+          "delayDepartureMinutes": 3,
+          "platform": "1"
+        },
+        {
+          "sequence": 3,
+          "stationCode": "AIRL",
+          "scheduledArrival": "2026-08-24T10:56:00+05:30",
+          "scheduledDeparture": "2026-08-24T10:56:00+05:30",
+          "actualArrival": "2026-08-24T10:59:28+05:30",
+          "actualDeparture": "2026-08-24T10:59:28+05:30",
+          "delayArrivalMinutes": 3,
+          "delayDepartureMinutes": 3
+        },
+        {
+          "sequence": 4,
+          "stationCode": "RABE",
+          "scheduledArrival": "2026-08-24T10:59:00+05:30",
+          "scheduledDeparture": "2026-08-24T10:59:00+05:30",
+          "actualArrival": "2026-08-24T11:02:21+05:30",
+          "actualDeparture": "2026-08-24T11:02:42+05:30",
+          "delayArrivalMinutes": 3,
+          "delayDepartureMinutes": 4,
+          "platform": "1"
+        },
+        {
+          "sequence": 5,
+          "stationCode": "GNSL",
+          "scheduledArrival": "2026-08-24T11:02:00+05:30",
+          "scheduledDeparture": "2026-08-24T11:02:00+05:30",
+          "actualArrival": "2026-08-24T11:04:32+05:30",
+          "actualDeparture": "2026-08-24T11:04:32+05:30",
+          "delayArrivalMinutes": 3,
+          "delayDepartureMinutes": 3,
+          "platform": "1"
+        },
+        {
+          "sequence": 6,
+          "stationCode": "KPHN",
+          "scheduledArrival": "2026-08-24T11:05:00+05:30",
+          "scheduledDeparture": "2026-08-24T11:05:00+05:30",
+          "actualArrival": "2026-08-24T11:07:32+05:30",
+          "actualDeparture": "2026-08-24T11:07:32+05:30",
+          "delayArrivalMinutes": 3,
+          "delayDepartureMinutes": 3
+        },
+        {
+          "sequence": 7,
+          "stationCode": "TUH",
+          "scheduledArrival": "2026-08-24T11:09:00+05:30",
+          "scheduledDeparture": "2026-08-24T11:09:00+05:30",
+          "actualArrival": "2026-08-24T11:21:52+05:30",
+          "actualDeparture": "2026-08-24T11:21:52+05:30",
+          "delayArrivalMinutes": 13,
+          "delayDepartureMinutes": 13,
+          "platform": "1"
+        },
+        {
+          "sequence": 8,
+          "stationCode": "SNCR",
+          "scheduledArrival": "2026-08-24T11:13:00+05:30",
+          "scheduledDeparture": "2026-08-24T11:13:00+05:30",
+          "actualArrival": "2026-08-24T11:25:52+05:30",
+          "actualDeparture": "2026-08-24T11:25:52+05:30",
+          "delayArrivalMinutes": 13,
+          "delayDepartureMinutes": 13
+        },
+        {
+          "sequence": 9,
+          "stationCode": "VSH",
+          "scheduledArrival": "2026-08-24T11:17:00+05:30",
+          "actualArrival": "2026-08-24T11:37:52+05:30",
+          "delayArrivalMinutes": 21,
+          "platform": "1"
+        }
+      ]
+    }
+  },
+  "meta": {
+    "timestamp": "2026-08-24T23:07:38+05:30",
+    "traceId": "e9c98dea-6349-4228-8bae-8e7a98590207",
+    "source": "hybrid",
+    "executionTime": 88
+  }
+}

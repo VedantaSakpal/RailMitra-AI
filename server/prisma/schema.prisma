@@ -1,0 +1,388 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+  OPERATOR
+}
+
+enum LineType {
+  CENTRAL
+  WESTERN
+  HARBOUR
+}
+
+enum TrainType {
+  FAST
+  SEMI_FAST
+  SLOW
+  LOCAL
+  EXPRESS
+}
+
+enum TrainDirection {
+  UP
+  DOWN
+}
+
+enum TrainStatus {
+  ON_TIME
+  DELAYED
+  CANCELLED
+  TERMINATED
+}
+
+enum TicketStatus {
+  ACTIVE
+  USED
+  EXPIRED
+  CANCELLED
+}
+
+enum PassType {
+  DAILY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum PassStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum JourneyStatus {
+  PLANNED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum NotificationType {
+  TRAIN_APPROACHING
+  DELAY_ALERT
+  PLATFORM_CHANGE
+  CANCELLATION
+  DESTINATION_APPROACHING
+  JOURNEY_REMINDER
+  PASS_EXPIRY
+  GENERAL
+}
+
+enum ReportCategory {
+  DELAY
+  CROWDING
+  PLATFORM_ISSUE
+  LIFT_ESCALATOR
+  CLEANLINESS
+  SAFETY
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+enum CrowdLevel {
+  LOW
+  MODERATE
+  HIGH
+  VERY_HIGH
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  password         String
+  firstName        String
+  lastName         String
+  phone            String?
+  role             Role      @default(USER)
+  isEmailVerified  Boolean   @default(false)
+  profileImageUrl  String?
+  emergencyContact String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  tickets       Ticket[]
+  passes        Pass[]
+  journeys      Journey[]
+  notifications Notification[]
+  reports       PassengerReport[]
+
+  @@index([email])
+}
+
+model RailwayLine {
+  id          String   @id @default(cuid())
+  name        String
+  type        LineType @unique
+  color       String   // hex color for UI
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  stations Station[]
+  trains   Train[]
+}
+
+model Station {
+  id          String  @id @default(cuid())
+  name        String
+  code        String  @unique // e.g. "CSTM", "ADH", "BDR"
+  lineId      String
+  zone        Int     // Mumbai zone 1-6
+  latitude    Float?
+  longitude   Float?
+  hasParking  Boolean @default(false)
+  hasLift     Boolean @default(false)
+  isTerminal  Boolean @default(false)
+  sequence    Int     // order on the line
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  line         RailwayLine   @relation(fields: [lineId], references: [id])
+  stationStops StationStop[]
+  originTickets  Ticket[] @relation("TicketOrigin")
+  destTickets    Ticket[] @relation("TicketDest")
+  distancesFrom  StationDistance[] @relation("DistanceFrom")
+  distancesTo    StationDistance[] @relation("DistanceTo")
+
+  @@index([lineId])
+  @@index([code])
+}
+
+model StationDistance {
+  id              String   @id @default(cuid())
+  lineCode        String   // e.g. "CENTRAL", "WESTERN", "HARBOUR", "TRANS_HARBOUR"
+  fromStationId   String
+  toStationId     String
+  distanceKm      Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  fromStation     Station  @relation("DistanceFrom", fields: [fromStationId], references: [id])
+  toStation       Station  @relation("DistanceTo", fields: [toStationId], references: [id])
+
+  @@unique([lineCode, fromStationId, toStationId])
+  @@index([fromStationId])
+  @@index([toStationId])
+}
+
+model Train {
+  id          String         @id @default(cuid())
+  number      String         @unique
+  name        String
+  lineId      String
+  type        TrainType
+  direction   TrainDirection
+  isActive    Boolean        @default(true)
+  capacity    Int            @default(1200)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  line      RailwayLine   @relation(fields: [lineId], references: [id])
+  schedules TrainSchedule[]
+  routes    TrainRoute[]
+
+  @@index([lineId])
+  @@index([number])
+}
+
+model TrainRoute {
+  id        String   @id @default(cuid())
+  trainId   String
+  routeName String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  train        Train         @relation(fields: [trainId], references: [id])
+  stationStops StationStop[]
+
+  @@index([trainId])
+}
+
+model TrainSchedule {
+  id              String         @id @default(cuid())
+  trainId         String
+  departureTime   String         // "HH:mm" format
+  arrivalTime     String         // "HH:mm" format
+  runningDays     String[]       // ["MON","TUE","WED","THU","FRI","SAT","SUN"]
+  status          TrainStatus    @default(ON_TIME)
+  delayMinutes    Int            @default(0)
+  isActive        Boolean        @default(true)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  train Train @relation(fields: [trainId], references: [id])
+
+  @@index([trainId])
+}
+
+model StationStop {
+  id              String   @id @default(cuid())
+  routeId         String
+  stationId       String
+  stopSequence    Int
+  arrivalTime     String?  // "HH:mm"
+  departureTime   String?  // "HH:mm"
+  distance        Float?   // km from origin
+  platformNumber  Int?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  route   TrainRoute @relation(fields: [routeId], references: [id])
+  station Station    @relation(fields: [stationId], references: [id])
+
+  @@index([routeId])
+  @@index([stationId])
+}
+
+model Ticket {
+  id               String       @id @default(cuid())
+  ticketNumber     String       @unique @default(cuid())
+  userId           String
+  originStationId  String
+  destStationId    String
+  passengerCount   Int          @default(1)
+  fare             Float
+  status           TicketStatus @default(ACTIVE)
+  qrCode           String?
+  travelDate       DateTime
+  validUntil       DateTime
+  paymentId        String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  user          User    @relation(fields: [userId], references: [id])
+  originStation Station @relation("TicketOrigin", fields: [originStationId], references: [id])
+  destStation   Station @relation("TicketDest", fields: [destStationId], references: [id])
+  payment       Payment? @relation(fields: [paymentId], references: [id])
+
+  @@index([userId])
+  @@index([ticketNumber])
+}
+
+model Pass {
+  id           String     @id @default(cuid())
+  passNumber   String     @unique @default(cuid())
+  userId       String
+  type         PassType
+  status       PassStatus @default(ACTIVE)
+  zone         Int
+  fare         Float
+  startDate    DateTime
+  endDate      DateTime
+  qrCode       String?
+  autoRenew    Boolean    @default(false)
+  paymentId    String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  payment Payment? @relation(fields: [paymentId], references: [id])
+
+  @@index([userId])
+  @@index([passNumber])
+}
+
+model Journey {
+  id              String        @id @default(cuid())
+  userId          String
+  status          JourneyStatus @default(PLANNED)
+  startedAt       DateTime?
+  completedAt     DateTime?
+  distance        Float?
+  delayExperienced Int?         // minutes
+  sharingEnabled  Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  userId        String
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  method        String        // "UPI", "CARD", "NETBANKING", "WALLET"
+  transactionId String?       @unique
+  gateway       String?       // "razorpay", "stripe"
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  tickets Ticket[]
+  passes  Pass[]
+
+  @@index([userId])
+  @@index([transactionId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  data      Json?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model PassengerReport {
+  id          String         @id @default(cuid())
+  userId      String
+  category    ReportCategory
+  status      ReportStatus   @default(PENDING)
+  description String
+  stationId   String?
+  trainNumber String?
+  latitude    Float?
+  longitude   Float?
+  aiCategory  String?        // AI-generated category
+  resolvedAt  DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+}
